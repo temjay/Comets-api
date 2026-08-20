@@ -3,16 +3,19 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/
 @Controller('comets')
 export class CometsController {
     // Get /comets
-    @Get()
+
+    /**
+     * @Get()
     getComets() {
         return {}
     }
-
-    //Get /comets?type=fast
+     */
+    
+    //Get /comets?type=fast/slow
     @Get()
-    getFastComets(@Query('type') type: string) {
+    getComets(@Query('type') type: string) {
         return {
-            type,
+            
         }
     }
 
