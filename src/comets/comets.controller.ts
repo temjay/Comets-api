@@ -26,33 +26,25 @@ export class CometsController {
     // Get /comets/:id
     @Get(':id')
     getOneComet(@Param('id') id: string) {
-        return{
-            id,
-        }
+
+        return this.cometsService.getOneComet(Number(id))
     }
 
     // Post /comets
     @Post()
     createComet(@Body() createCometDto: CreateCometDto) {
-        return{
-            name: createCometDto.name,
-        }
+        return this.cometsService.createComet(createCometDto);
     }
 
     // Put /comets/:id
     @Put(':id')
     updateComet(@Param('id') id: string, @Body() updateCometDto: UpdateCometDto) {
-        return{
-            id,
-            name: updateCometDto.name,
-        }
+        return this.cometsService.updateComet(Number(id), updateCometDto);
     }
 
     // Delete /comets/:id
     @Delete(':id')
     deleteComet(@Param('id') id: string) {
-        return{
-            id,
-        }
+        return this.cometsService.deleteComet(Number(id));
     }
 }
