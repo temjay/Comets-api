@@ -1,22 +1,26 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { CreateCometDto } from './dto/create-comet.dto';
 import { UpdateCometDto } from './dto/update-comet.dto';
+import { CometsService } from './comets.service';
 
 @Controller('comets')
 export class CometsController {
     // Get /comets
+    // @Get()
+    // getComets() {
+    //     const service = new CometsService();
 
-    /**
-     * @Get()
-    getComets() {
-        return {}
-    }
-     */
+    //     return service.getComets();
+    // }
+     
     
-    //Get /comets?type=fast/slow
+   // Get /comets?type=fast/slow
     @Get()
-    getComets(@Query('type') type: string) {
-        return [{type}]
+    getQueriedComets(@Query('type') type: string) {
+
+        const service = new CometsService();
+
+        return service.getQueriedComets(type);
     }
 
     // Get /comets/:id
