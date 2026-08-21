@@ -1,4 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { CreateCometDto } from './dto/create-comet.dto';
+import { UpdateCometDto } from './dto/update-comet.dto';
 
 @Controller('comets')
 export class CometsController {
@@ -27,16 +29,18 @@ export class CometsController {
 
     // Post /comets
     @Post()
-    createComet() {
-        return{}
+    createComet(@Body() createCometDto: CreateCometDto) {
+        return{
+            name: createCometDto.name,
+        }
     }
 
     // Put /comets/:id
     @Put(':id')
-    updateComet(@Param('id') id: string, @Body() body: any) {
+    updateComet(@Param('id') id: string, @Body() updateCometDto: UpdateCometDto) {
         return{
             id,
-            body,
+            name: updateCometDto.name,
         }
     }
 
