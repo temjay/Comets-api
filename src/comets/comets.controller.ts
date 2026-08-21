@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
 import { CreateCometDto } from './dto/create-comet.dto';
 import { UpdateCometDto } from './dto/update-comet.dto';
 import { CometsService } from './comets.service';
@@ -25,9 +25,9 @@ export class CometsController {
 
     // Get /comets/:id
     @Get(':id')
-    getOneComet(@Param('id') id: string) {
+    getOneComet(@Param('id', ParseIntPipe) id: number) {
         try {
-            return this.cometsService.getOneComet(Number(id));
+            return this.cometsService.getOneComet(id);
         } catch (err) {
             throw new NotFoundException();
         }
