@@ -14,9 +14,7 @@ export class CometsController {
     //Get /comets?type=fast/slow
     @Get()
     getComets(@Query('type') type: string) {
-        return {
-            
-        }
+        return [{type}]
     }
 
     // Get /comets/:id
@@ -29,10 +27,8 @@ export class CometsController {
 
     // Post /comets
     @Post()
-    createComet(@Body() body: any) {
-        return{
-            body,
-        }
+    createComet() {
+        return{}
     }
 
     // Put /comets/:id
