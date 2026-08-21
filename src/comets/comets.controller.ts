@@ -5,6 +5,10 @@ import { CometsService } from './comets.service';
 
 @Controller('comets')
 export class CometsController {
+
+    //intstantiate the service class
+    constructor(private readonly cometsService: CometsService) {}
+
     // Get /comets
     // @Get()
     // getComets() {
@@ -12,15 +16,11 @@ export class CometsController {
 
     //     return service.getComets();
     // }
-     
     
    // Get /comets?type=fast/slow
     @Get()
     getQueriedComets(@Query('type') type: string) {
-
-        const service = new CometsService();
-
-        return service.getQueriedComets(type);
+        return this.cometsService.getQueriedComets(type);
     }
 
     // Get /comets/:id
