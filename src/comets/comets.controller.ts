@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { CreateCometDto } from './dto/create-comet.dto';
 import { UpdateCometDto } from './dto/update-comet.dto';
 import { CometsService } from './comets.service';
@@ -35,7 +35,7 @@ export class CometsController {
 
     // Post /comets
     @Post()
-    createComet(@Body() createCometDto: CreateCometDto) {
+    createComet(@Body(new ValidationPipe()) createCometDto: CreateCometDto) {
         return this.cometsService.createComet(createCometDto);
     }
 
