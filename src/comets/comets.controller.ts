@@ -35,7 +35,7 @@ export class CometsController {
 
     // Post /comets
     @Post()
-    createComet(@Body(new ValidationPipe()) createCometDto: CreateCometDto) {
+    createComet(@Body() createCometDto: CreateCometDto) {
         return this.cometsService.createComet(createCometDto);
     }
 
