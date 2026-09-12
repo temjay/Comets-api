@@ -20,7 +20,7 @@ export class CometsService {
         return this.comets;
     }
 
-    getOneComet(id) {
+    async getOneComet(id) {
         const comet = this.comets.find(comet => comet.id === id);
         
         if(!comet) {
