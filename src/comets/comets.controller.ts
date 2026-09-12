@@ -17,10 +17,10 @@ export class CometsController {
     //     return service.getComets();
     // }
     
-   // Get /comets?type=fast/slow
+   // Get /comets?speed=fast/slow
     @Get()
-    getQueriedComets(@Query('type') type: string) {
-        return this.cometsService.getQueriedComets(type);
+    getQueriedComets(@Query('speed') speed: string) {
+        return this.cometsService.getQueriedComets(speed);
     }
 
     // Get /comets/:id
