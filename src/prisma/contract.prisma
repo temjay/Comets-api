@@ -3,17 +3,16 @@
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  username  String?
-  name      String?
-  posts     Post[]
+  username  String?  @unique
+  comets    Comet[]
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 }
 
-model Post {
+model Comet {
   id        Int      @id @default(autoincrement())
   title     String
-  content   String?
+  speed     String
   author    User     @relation(fields: [authorId], references: [id])
   authorId  Int
   createdAt TimestamptzString @default(now())
