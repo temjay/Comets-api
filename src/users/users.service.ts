@@ -2,28 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './userInterface';
+import { db } from '../prisma/db'
+
 
 @Injectable()
 export class UsersService {
 
   private users: User[] = []
+  
 
-  create(dto: CreateUserDto) {
-    //generate id for the new user
-    const id = Date.now();
 
-    // create a new user object with the generated id and the data from the dto
-    const newUser: User = {
-      id,
-      ...dto
-    }
-
-    // add the new user to the users array
-    this.users.push(newUser);
-
-    //return the new user object
-    return newUser;
+  async create(user:{name: string, email: string, password: string}) {
+    return db.orm.public.User.create(user)
   }
+
+  // create(dto: CreateUserDto) {
+  //   //generate id for the new user
+  //   const id = Date.now();
+
+  //   // create a new user object with the generated id and the data from the dto
+  //   const newUser: User = {
+  //     id,
+  //     ...dto
+  //   }
+
+  //   // add the new user to the users array
+  //   this.users.push(newUser);
+
+  //   //return the new user object
+  //   return newUser;
+  // }
 
   findAll() {
     return `This action returns all users`;
