@@ -6,6 +6,5 @@ export class CreateCometDto {
     name: string;
 
     @IsString()
-    @IS_NOT_EMPTY({ message: 'Speed is required' })
     speed: string;
 }
