@@ -6,23 +6,23 @@ import { User } from './userInterface';
 @Injectable()
 export class UsersService {
 
-  private users:User[] = []
+  private users: User[] = []
 
   create(dto: CreateUserDto) {
     //generate id for the new user
-     const id = Date.now();
+    const id = Date.now();
 
-     // create a new user object with the generated id and the data from the dto
-     const newUser: User = {
-        id,
-        ...dto
-     }
+    // create a new user object with the generated id and the data from the dto
+    const newUser: User = {
+      id,
+      ...dto
+    }
 
-     // add the new user to the users array
-     this.users.push(newUser);
+    // add the new user to the users array
+    this.users.push(newUser);
 
-     //return the new user object
-     return newUser;
+    //return the new user object
+    return newUser;
   }
 
   findAll() {
@@ -36,6 +36,20 @@ export class UsersService {
   update(id: number, dto: UpdateUserDto) {
     //fetch the user id of the user to be updated
     const userIndex = this.users.findIndex(user => user.id === id);
+
+    if (userIndex === -1) {
+      throw new Error(`User with id ${id} not found`);
+    }
+
+    //merge the existing user data with the new data from the dto
+    const updatedUser: User = {
+      ...this.users[userIndex],
+      ...dto,
+      id // ensure the id remains the same
+    }
+
+    this.users[userIndex] = updatedUser;
+    return updatedUser;
   }
 
   remove(id: number) {
