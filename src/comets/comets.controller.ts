@@ -9,18 +9,9 @@ export class CometsController {
     //intstantiate the service class
     constructor(private readonly cometsService: CometsService) {}
 
-    // Get /comets
-    // @Get()
-    // getComets() {
-    //     const service = new CometsService();
-
-    //     return service.getComets();
-    // }
-    
-   // Get /comets?speed=fast/slow
     @Get()
-    getQueriedComets(@Query('speed') speed: string) {
-        return this.cometsService.getQueriedComets(speed);
+    getComets(@Query('speed') speed: string) {
+        return this.cometsService.getComets(speed);
     }
 
     // Get /comets/:id
@@ -35,19 +26,19 @@ export class CometsController {
 
     // Post /comets
     @Post()
-    createComet(@Body() createCometDto: CreateCometDto) {
-        return this.cometsService.createComet(createCometDto);
+    async createComet(@Body() createCometDto: CreateCometDto) {
+        return await this.cometsService.createComet(createCometDto);
     }
 
     // Put /comets/:id
     @Put(':id')
-    updateComet(@Param('id') id: string, @Body() updateCometDto: UpdateCometDto) {
-        return this.cometsService.updateComet(Number(id), updateCometDto);
+    async updateComet(@Param('id', ParseIntPipe) id: number, @Body() updateCometDto: UpdateCometDto) {
+        return await this.cometsService.updateComet(id, updateCometDto);
     }
 
     // Delete /comets/:id
     @Delete(':id')
-    deleteComet(@Param('id') id: string) {
-        return this.cometsService.deleteComet(Number(id));
+    async deleteComet(@Param('id', ParseIntPipe) id: number) {
+        return await this.cometsService.deleteComet(id);
     }
 }

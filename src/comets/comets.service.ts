@@ -1,61 +1,38 @@
 import { Injectable } from '@nestjs/common';
+import { Comet } from './cometInterface';
+import { db } from 'src/prisma/db';
 
 @Injectable()
 export class CometsService {
-    private comets = [
-        {id: 1, name: "comet1", speed: "fast"},
-        {id: 2, name: "comet2", speed: "slow"},
-        {id: 3, name: "comet3", speed: "medium-paced"},
-    ]
+    private comets: Comet[] = []
 
-    // getComets() {
-    //     return this.comets;
-    // }
-
-    getQueriedComets(speed) {
+    async getComets(speed: string) {
         if (speed) {
-            return this.comets.filter(comet => comet.speed === speed);
+            return await db.orm.public.Comet.where({ speed }).all();
         }
-        
-        return this.comets;
+        else
+        {
+            return await db.orm.public.Comet.all();
+        }
     }
 
-    async getOneComet(id) {
-        const comet = this.comets.find(comet => comet.id === id);
-        
-        if(!comet) {
-            throw new Error(`Comet with id ${id} not found`);
-        }
-
-        return comet;
+    async getOneComet(id: number) {
+       return await db.orm.public.Comet.where({ id }).first();
     }
 
-    createComet(createCometDto) {
-        const newComet = {
-            id: Date.now(),
+    async createComet(createCometDto) {
+        return await db.orm.public.Comet.create({
             ...createCometDto,
-        };
-
-        this.comets.push(newComet);
-        return newComet;
-    }
-
-    updateComet(id, updateCometDto) {
-        this.comets = this.comets.map(comet => {
-            if(comet.id === id) {
-                return {
-                    ...comet,
-                    ...updateCometDto,
-                }
-            }
-            return comet;
         });
     }
 
-    deleteComet(id) {
-        const toBeRemoved = this.getOneComet(id);
+    async updateComet(id: number, updateCometDto) {
+        return await db.orm.public.Comet.where({ id }).update({
+            ...updateCometDto,
+        });
+    }
 
-        this.comets = this.comets.filter(comet => comet.id !== id);
-        return toBeRemoved;
+    async deleteComet(id: number) {
+        return await db.orm.public.Comet.where({ id }).delete();
     }
 }
