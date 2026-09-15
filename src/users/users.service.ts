@@ -12,7 +12,7 @@ export class UsersService {
   
 
 
-  async create(user:{name: string, email: string, password: string}) {
+  async create(user: CreateUserDto) {
     return db.orm.public.User.create(user)
   }
 
