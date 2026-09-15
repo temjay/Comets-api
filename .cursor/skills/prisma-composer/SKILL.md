@@ -2,7 +2,7 @@
 name: prisma-composer
 metadata:
   library: "@prisma/composer"
-  library_version: "0.15.0"
+  library_version: "0.14.0"
 description: >-
   How to write, test, and deploy an app with Prisma Composer
   (`@prisma/composer`): declare services with `compute()` and typed
@@ -314,7 +314,7 @@ Construct it in your server entry, as in the auth example above.
 **`pnPostgres(...)`** — a Prisma Next-typed database: `load()`
 returns the typed client the framework constructs from your data contract, so
 queries like `db.orm.public.Product.all()` are compile-time checked. The
-contract is emitted from `contract.prisma` by `prisma contract emit` and
+contract is emitted from `contract.prisma` by `prisma-next contract emit` and
 wrapped once, referenced by both ends:
 
 ```ts
@@ -328,36 +328,17 @@ export const catalogData = pnContract<Contract>(contractJson);
 
 The dependency end is `deps: { db: pnPostgres(catalogData) }`. The resource
 end (inside the module that owns the database) also names the
-`prisma.config.ts` path, which the deploy's migration step loads to find
-`migrations/` — committed migrations are replayed at deploy, before the
-service starts:
+`prisma-next.config.ts` path, which the deploy's migration step loads to find
+`migrations/` — migrations are applied at deploy, before the service starts:
 
 ```ts
 const db = provision(
-  pnPostgres({ name: 'database', contract: catalogData, config: './prisma.config.ts' }),
+  pnPostgres({ name: 'database', contract: catalogData, config: './prisma-next.config.ts' }),
 );
 ```
 
 (`pnPostgres` is both ends: the contract alone is the dependency end; the
 options object is the resource end.)
-
-The deploy is replay-only: it applies the migrations committed under
-`migrations/` and never creates schema itself. Every schema change (including
-the very first schema of a new database) follows the same loop:
-
-1. Edit `contract.prisma`.
-2. `prisma contract emit` — regenerates `contract.json` + `contract.d.ts`.
-3. `prisma migration plan --name <slug>` — authors the migration into
-   `migrations/` (on an empty graph this authors the baseline,
-   empty → your schema).
-4. Commit `migrations/` with the change, then deploy. A fresh database
-   replays the whole path from empty.
-
-If no authored path reaches the target contract, the deploy (and
-`prisma-composer dev` against a stale local database) refuses with
-`MIGRATION_PATH_NOT_FOUND` and names the exits: author the missing migration
-as above, or — when iterating against a local database only — bring it along
-directly with `prisma db update`. Never skip step 3 before a deploy.
 
 See `examples/store/modules/catalog` in the prisma/composer repo for the
 complete pattern.
