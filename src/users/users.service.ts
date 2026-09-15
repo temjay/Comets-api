@@ -9,11 +9,30 @@ import { db } from '../prisma/db'
 export class UsersService {
 
   private users: User[] = []
-  
 
 
   async create(user: CreateUserDto) {
-    return db.orm.public.User.create(user)
+    return await db.orm.public.User.create({
+      ...user,
+    })
+  }
+
+  async findAll() {
+    return await db.orm.public.User.all();
+  }
+
+  async findOne(id: number) {
+    return await db.orm.public.User.where({ id }).first();
+  }
+
+  async update(id: number, dto: UpdateUserDto) {
+    return await db.orm.public.User.where({ id }).update({
+      ...dto,
+    });
+  }
+
+  async remove(id: number) {
+    return await db.orm.public.User.where({ id }).delete();
   }
 
   // create(dto: CreateUserDto) {
@@ -33,34 +52,24 @@ export class UsersService {
   //   return newUser;
   // }
 
-  findAll() {
-    return `This action returns all users`;
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
+  // update(id: number, dto: UpdateUserDto) {
+  //   //fetch the user id of the user to be updated
+  //   const userIndex = this.users.findIndex(user => user.id === id);
 
-  update(id: number, dto: UpdateUserDto) {
-    //fetch the user id of the user to be updated
-    const userIndex = this.users.findIndex(user => user.id === id);
+  //   if (userIndex === -1) {
+  //     throw new Error(`User with id ${id} not found`);
+  //   }
 
-    if (userIndex === -1) {
-      throw new Error(`User with id ${id} not found`);
-    }
+  //   //merge the existing user data with the new data from the dto
+  //   const updatedUser: User = {
+  //     ...this.users[userIndex],
+  //     ...dto,
+  //     id // ensure the id remains the same
+  //   }
 
-    //merge the existing user data with the new data from the dto
-    const updatedUser: User = {
-      ...this.users[userIndex],
-      ...dto,
-      id // ensure the id remains the same
-    }
+  //   this.users[userIndex] = updatedUser;
+  //   return updatedUser;
+  // }
 
-    this.users[userIndex] = updatedUser;
-    return updatedUser;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
 }
