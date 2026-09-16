@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from '@nestjs/common';
-import { CreateCometDto } from './dto/create-comet.dto';
-import { UpdateCometDto } from './dto/update-comet.dto';
-import { CometsService } from './comets.service';
+import { CreateCometDto } from './dto/create-comet.dto.js';
+import { UpdateCometDto } from './dto/update-comet.dto.js';
+import { CometsService } from './comets.service.js';
 
 @Controller('comets')
 export class CometsController {
