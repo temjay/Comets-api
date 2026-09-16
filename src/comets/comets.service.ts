@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Comet } from './cometInterface.js';
-import { db } from 'src/prisma/db.js';
+import { db } from '../prisma/db.js';
 
 @Injectable()
 export class CometsService {
