@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Comet } from './cometInterface.js';
 import { db } from '../prisma/db.js';
 
 @Injectable()
 export class CometsService {
-    private comets: Comet[] = []
 
     async getComets(speed: string) {
         if (speed) {

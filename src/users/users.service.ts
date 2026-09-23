@@ -8,9 +8,6 @@ import { db } from '../prisma/db.js'
 @Injectable()
 export class UsersService {
 
-  private users: User[] = []
-
-
   async create(user: CreateUserDto) {
     return await db.orm.public.User.create({
       ...user,
@@ -34,6 +31,8 @@ export class UsersService {
   async remove(id: number) {
     return await db.orm.public.User.where({ id }).delete();
   }
+
+  // private users: User[] = []
 
   // create(dto: CreateUserDto) {
   //   //generate id for the new user
