@@ -1,6 +1,6 @@
 #!/usr/bin/env -S node
-import type { Contract as End } from '../../snapshots/fc8f74d82895306525742b66569b243851f8c85d6ce564c01434fdbba7444dcd/contract';
-import endContract from '../../snapshots/fc8f74d82895306525742b66569b243851f8c85d6ce564c01434fdbba7444dcd/contract.json' with { type: 'json' };
+import type { Contract as End } from '../../snapshots/12988b4cf3c5680433522527f289f5be8605d4901fa816ad0ca4cf18e70fadd3/contract';
+import endContract from '../../snapshots/12988b4cf3c5680433522527f289f5be8605d4901fa816ad0ca4cf18e70fadd3/contract.json' with { type: 'json' };
 import { Migration, MigrationCLI, col, fn, primaryKey } from '@prisma/orm-postgres/migration';
 
 export default class M extends Migration<never, End> {
@@ -31,6 +31,29 @@ export default class M extends Migration<never, End> {
       }),
       this.createTable({
         schema: 'public',
+        table: 'refreshToken',
+        columns: [
+          col('createdAt', 'timestamptz', {
+            notNull: true,
+            default: fn('now()'),
+            codecRef: { codecId: 'pg/timestamptz-string@1' },
+          }),
+          col('expiryDate', 'timestamptz', {
+            notNull: true,
+            codecRef: { codecId: 'pg/timestamptz-temporal@1' },
+          }),
+          col('id', 'SERIAL', { notNull: true, codecRef: { codecId: 'pg/int4@1' } }),
+          col('token', 'text', { notNull: true, codecRef: { codecId: 'pg/text@1' } }),
+          col('updatedAt', 'timestamptz', {
+            notNull: true,
+            codecRef: { codecId: 'pg/timestamptz-string@1' },
+          }),
+          col('userId', 'int4', { notNull: true, codecRef: { codecId: 'pg/int4@1' } }),
+        ],
+        constraints: [primaryKey(['id'])],
+      }),
+      this.createTable({
+        schema: 'public',
         table: 'user',
         columns: [
           col('createdAt', 'timestamptz', {
@@ -40,6 +63,7 @@ export default class M extends Migration<never, End> {
           }),
           col('email', 'text', { notNull: true, codecRef: { codecId: 'pg/text@1' } }),
           col('id', 'SERIAL', { notNull: true, codecRef: { codecId: 'pg/int4@1' } }),
+          col('password', 'text', { notNull: true, codecRef: { codecId: 'pg/text@1' } }),
           col('updatedAt', 'timestamptz', {
             notNull: true,
             codecRef: { codecId: 'pg/timestamptz-string@1' },
@@ -47,6 +71,12 @@ export default class M extends Migration<never, End> {
           col('username', 'text', { codecRef: { codecId: 'pg/text@1' } }),
         ],
         constraints: [primaryKey(['id'])],
+      }),
+      this.addUnique({
+        schema: 'public',
+        table: 'refreshToken',
+        constraint: 'refreshToken_token_key',
+        columns: ['token'],
       }),
       this.addUnique({
         schema: 'public',
@@ -66,12 +96,27 @@ export default class M extends Migration<never, End> {
         index: 'comet_authorId_idx_e47547ed',
         columns: ['authorId'],
       }),
+      this.createIndex({
+        schema: 'public',
+        table: 'refreshToken',
+        index: 'refreshToken_userId_idx_a489d58a',
+        columns: ['userId'],
+      }),
       this.addForeignKey({
         schema: 'public',
         table: 'comet',
         foreignKey: {
           name: 'comet_authorId_fkey',
           columns: ['authorId'],
+          references: { schema: 'public', table: 'user', columns: ['id'] },
+        },
+      }),
+      this.addForeignKey({
+        schema: 'public',
+        table: 'refreshToken',
+        foreignKey: {
+          name: 'refreshToken_userId_fkey',
+          columns: ['userId'],
           references: { schema: 'public', table: 'user', columns: ['id'] },
         },
       }),
