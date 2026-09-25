@@ -8,6 +8,10 @@
       "model": "Comet",
       "namespace": "public"
     },
+    "refreshToken": {
+      "model": "RefreshToken",
+      "namespace": "public"
+    },
     "user": {
       "model": "User",
       "namespace": "public"
@@ -102,6 +106,93 @@
               },
               "namespaceId": "public",
               "table": "comet"
+            }
+          },
+          "RefreshToken": {
+            "fields": {
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "expiryDate": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "token": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "user": {
+                "cardinality": "N:1",
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "expiryDate": {
+                  "column": "expiryDate"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "token": {
+                  "column": "token"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "refreshToken"
             }
           },
           "User": {
@@ -276,6 +367,88 @@
               },
               "uniques": []
             },
+            "refreshToken": {
+              "columns": {
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "expiryDate": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "id": {
+                  "codecId": "pg/int4@1",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nativeType": "int4",
+                  "nullable": false
+                },
+                "token": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "nativeType": "timestamptz",
+                  "nullable": false
+                },
+                "userId": {
+                  "codecId": "pg/int4@1",
+                  "nativeType": "int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "refreshToken"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "user"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "userId"
+                  ],
+                  "name": "refreshToken_userId_idx_a489d58a",
+                  "prefix": "refreshToken_userId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": [
+                {
+                  "columns": [
+                    "token"
+                  ]
+                }
+              ]
+            },
             "user": {
               "columns": {
                 "createdAt": {
@@ -343,10 +516,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "506ccd3a6e9693146d85639c099f30161ded0035341a2fbf00a17b926cfd8580"
+    "storageHash": "12988b4cf3c5680433522527f289f5be8605d4901fa816ad0ca4cf18e70fadd3"
   },
   "execution": {
-    "executionHash": "4cb70d904e9f00cfed0ba96e690f9f36fb411f26bf9975cd8b2db8293ce97e1e",
+    "executionHash": "d3e1f0049d25f6114ac6db2175bcb13424988dcb99cdda4c2e61cf3c1c466309",
     "mutations": {
       "defaults": [
         {
@@ -362,6 +535,21 @@
             "column": "updatedAt",
             "namespace": "public",
             "table": "comet"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestampNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "column": "updatedAt",
+            "namespace": "public",
+            "table": "refreshToken"
           }
         },
         {
