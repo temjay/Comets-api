@@ -59,10 +59,27 @@ export class UsersService {
   //generate token method
   async generateToken(user) {
     const accesstoken = this.jwtService.sign({ id: user.id }, {expiresIn: '1h'});
+    const refreshToken = uuidv4();
+
+    await this.storeRefreshToken(user.id, refreshToken);
 
     return {
       accesstoken,
+      refreshToken
     }
+  }
+
+  //store refresh token in the database
+  async storeRefreshToken(userId: number, token: string) {
+    //calculate expirydate 3 days from now
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 3);
+
+    await db.orm.public.RefreshToken.create({
+      userId,
+      token,
+      expiryDate,
+    })
   }
 
   async findAll() {
@@ -123,3 +140,7 @@ export class UsersService {
   // }
 
 }
+function uuidv4() {
+  throw new Error('Function not implemented.');
+}
+
