@@ -58,7 +58,7 @@ export class UsersService {
   }
 
   //generate token method
-  async generateToken(user) {
+  async generateToken(user: any) {
     const accesstoken = this.jwtService.sign({ id: user.id }, {expiresIn: '1h'});
     const refreshToken = uuidv4();
 
