@@ -89,6 +89,10 @@ export class AuthService {
         throw new UnauthorizedException(`Invalid or expired refresh token`);
      }
 
+     //delete it so it can't be used again
+     await db.orm.public.RefreshToken.where({ id: refreshToken.id }).delete();
+
+     //generate a new access token and refresh token
      return this.generateToken({ id: refreshToken.userId });
   }
 }
