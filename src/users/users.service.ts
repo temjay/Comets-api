@@ -5,6 +5,7 @@ import { User } from './userInterface.js';
 import { db } from '../prisma/db.js'
 import bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { v4 as uuidv4 } from 'uuid';
 
 
 @Injectable()
@@ -140,7 +141,3 @@ export class UsersService {
   // }
 
 }
-function uuidv4() {
-  throw new Error('Function not implemented.');
-}
-
