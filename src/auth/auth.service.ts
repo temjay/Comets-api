@@ -49,7 +49,11 @@ export class AuthService {
     }
 
     //generate jwt token
-    return this.generateToken(user);
+   const tokens = this.generateToken(user);
+   return{
+        ...tokens,
+        user_id: user.id,
+   }
   }
 
   //generate token method
