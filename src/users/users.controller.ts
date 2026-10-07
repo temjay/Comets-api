@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { UsersService } from './users.service.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
-import { AuthGuard } from 'src/auth/auth.guard.js';
+import { AuthGuard } from '../auth/auth.guard.js';
 
 @Controller('users')
 export class UsersController {
