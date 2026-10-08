@@ -24,7 +24,21 @@ export class AuthGuard implements CanActivate {
 
 
 function extractToken(request: any): string | undefined {
-  throw new Error('Function not implemented.');
+  const authorization = request.header.authorization
+
+  if(!authorization)
+  {
+    return undefined
+  }
+
+  const [type, token] = authorization.split(' ')
+
+  if(type !== "Bearer" || !token)
+  {
+    return undefined
+  }
+
+  return token
 }
 
 function verifyToken(token: any) {
