@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
 @Injectable()
@@ -7,11 +7,11 @@ export class AuthGuard implements CanActivate {
   { 
     const request = context.switchToHttp().getRequest();
 
-    const token = extractTokenFromHeader(request);
+    const token = extractToken(request)
 
     if(!token)
     {
-      throw new unauthorizedException();
+      throw new UnauthorizedException();
     }
 
     const payload = verifyToken(token);
@@ -21,3 +21,13 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 }
+
+
+function extractToken(request: any): string | undefined {
+  throw new Error('Function not implemented.');
+}
+
+function verifyToken(token: any) {
+  throw new Error('Function not implemented.');
+}
+
